@@ -1,0 +1,10 @@
+<body></body>
+    <h1>Welcome <span class="who">?</span>!!!</h1>
+    <script>
+        const who = document.querySelector(".who");
+        const userObject = JSON.parse(localStorage.user); //cut text string up into parts (an object)
+        who.innerText = userObject.username;
+        //who.innerText = localStorage.username
+        // who.innerText = window.location.search; //querystring
+    </script>
+</body>

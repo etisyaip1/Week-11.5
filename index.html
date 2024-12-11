@@ -1,0 +1,88 @@
+<head>
+    <style>
+        h1 {
+            color: blueviolet;
+        }
+
+        #username {
+            color: orangered;
+        }
+
+        .big {
+            font-size: 2rem;
+        }
+
+        body {
+            background-color: lightseagreen;
+        }
+
+        .outcome {
+            color: fuchsia;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Register</h1>
+    <div>
+        <input type="text" id="username" placeholder="User Name">
+        <span class="outcome">GOOD</span>
+    </div>
+    <button id="signup" class="big">Sign-Up</button>
+    <script>
+        function setText(element, text, color){
+            element.innerText = text;
+            element.style.color = color;
+        }
+        function badText(element){
+            setText(element, "BAD", "red")
+        }
+        function goodText(element){
+            setText(element, "GOOD", "green")
+        }
+        function warnText(element, text){
+            setText(element, text, "black")
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const SUCCESS_200 = 200;
+            const NOT_FOUND_404 = 404;
+            const base_service = "http://localhost:8083/api" //endpoint base url 
+
+            const e = document.getElementById("username"); //not a selector
+            const outcome = document.querySelector(".outcome");
+
+            e.addEventListener("keyup", async () => {
+                
+                //WHAT METHOD IS BEING USED IN THIS FETCH CALL? GET!!! is the default.
+                const endpoint = base_service + "/username_available/";
+
+                try{
+                    const r = await fetch(endpoint + e.value);
+
+                    if (r.status === SUCCESS_200) {
+                        const data = await r.json();
+                        if(data.available){ //already a boolean
+                            goodText(outcome);
+                        }else{
+                            badText(outcome);
+                        }
+                    } else if(r.status === NOT_FOUND_404){
+                        badText(outcome);
+                    }else{ //OTHER RESPONSE CODE
+                        warnText(outcome, r.status);
+                    }
+                } catch (e){
+                    warnText(outcome, e);
+                }
+            });
+
+            signup.addEventListener("click", ()=>{
+                window.location.href = "welcome.html";
+                const obj = { username: e.value };
+                localStorage.user = JSON.stringify(obj); // conver binary object to text string
+                // window.location.href = "welcome.html?username=" + e.value;
+            });
+        });//end load
+    </script>
+</body>

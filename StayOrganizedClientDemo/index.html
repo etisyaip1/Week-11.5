@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo</title>
+</head>
+
+<body>
+    <main>
+        <h1>TODO</h1>
+        <div id="newToDo">
+            <input type="date" id="dateDueInput">
+            <select id="userList">
+                <option value="1">Kevin</option>
+            </select>
+            <select id="catList">
+                <option>Personal</option>
+            </select>
+            <input type="text" id="newToDoInput">
+            <button id="newToDoSaveButton">Save</button>
+        </div>
+        <div id="filters"></div>
+        <div id="results"></div>
+        <h1>Add USer</h1>
+        
+    </main>
+    <script>
+        let baseURL = "http://localhost:8083/api/";
+
+        async function deleteToDo(id) {
+            await fetch(baseURL + "todos/" + id, { method: "DELETE", });
+            window.location.href = "index.html"; //refresh page
+        }
+
+        function renderToDo(t) {
+            const e = document.createElement("div");
+            e.innerText = t.description;
+            const del = document.createElement("button");
+            del.innerText = "X";
+            del.addEventListener("click", () => deleteToDo(t.id));
+            e.appendChild(del);
+            results.appendChild(e);
+        }
+
+        async function saveToDo() {
+            let text = newToDoInput.value;
+            let newObject = {
+                "userid": userList.value,
+                "category": catList.value,
+                "description": text,
+                "deadline": dateDueInput.value,
+                "priority": "Medium",
+                "completed": false
+            }
+            let response = await fetch(baseURL + "todos", {
+                method: "POST", //CREATE
+                body: JSON.stringify(newObject),
+                headers: {
+                    "Content-type": "application/json"
+                }
+            });
+            window.location.href = "index.html"; //refresh page
+        }
+
+        async function saveUser() {
+            let newObject = {
+                name: nameInput.value,
+                username: unInput.value,
+                password: pwInput.value
+            }
+            let response = await fetch(baseURL + "users", {
+                method: "POST", //CREATE
+                body: JSON.stringify(newObject),
+                headers: {"Content-type": "application/json"}
+            });
+            window.location.href = "index.html"; //refresh page
+        }
+
+        document.addEventListener("DOMContentLoaded", async () => {
+
+            newToDoSaveButton.addEventListener("click", saveToDo);
+
+            let example = {
+                "id": 1,
+                "userid": 5,
+                "category": "Personal Task",
+                "description": "Finish studying for ENG 211 exam",
+                "deadline": "2022-12-15",
+                "priority": "Medium",
+                "completed": false
+            };
+            let todoListResponse = await fetch(baseURL + "todos");
+            let todoList = await todoListResponse.json();
+            todoList.forEach(renderToDo);
+        });// end load
+    </script>
+</body>
+
+</html>

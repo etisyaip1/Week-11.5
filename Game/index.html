@@ -1,0 +1,27 @@
+<head>
+    <script src="./game.js"></script>
+</head>
+<body>
+    <input type="text" placeholder="hero name" id="heroName">
+    <input type="text" placeholder="villian name" id="villianName">
+    <button id="playButton">Play</button>
+    <pre id="display"></pre>
+<script>
+document.addEventListener("DOMContentLoaded", ()=>{
+    playButton.addEventListener("click", ()=>{
+
+        const hero = new Hero(heroName.value);
+        const villian = new Fighter(villianName.value)
+
+        const fg = new FightingGame([hero, villian]);
+        console.log(fg.status());
+        display.innerText = fg.fight(hero, villian);
+        console.log(fg.status());
+
+    });
+});
+
+
+
+    </script>
+</body>

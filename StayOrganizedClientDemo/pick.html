@@ -1,0 +1,22 @@
+<body></body>
+    <input type="text" id="searchText">
+    <select name="" id="fruit">
+        <option>apple pie</option>
+        <option>banana cream pudding</option>
+        <option>cherry sundae</option>
+    </select>
+    <script>
+        document.addEventListener("DOMContentLoaded",()=>{
+
+            searchText.addEventListener("keyup",e=>{
+                for(i=0;i<fruit.options.length;i++){
+                    if(fruit.options[i].value.includes(searchText.value)){
+                        fruit.selectedIndex = i;
+                        break;
+                    }
+                }
+            })
+
+        })
+    </script>
+</body>
